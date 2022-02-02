@@ -37,3 +37,4 @@ added get playlists
 NextAuth
 Hero icons 
 Nextjs
+Using recoil to access global state. Used to communicate state betwewen componenents. Uses atoms. Alternative to Redux

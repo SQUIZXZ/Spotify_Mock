@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import {HomeIcon, SearchIcon, LibraryIcon, RssIcon, HeartIcon, PlusCircleIcon} from '@heroicons/react/outline'
 import {signOut, useSession} from "next-auth/react"
 import useSpotify from '../hooks/useSpotify'
+import { useRecoilState } from 'recoil';
+import {playlistIdState} from '../atoms/playlistAtom'
 
 
 const sidebar = () => {
     const spotifyApi = useSpotify()
     const {data: session, status} = useSession()
     const [playlists, setPlaylists] = useState([])
+    const [playlistId, setPlaylistId] = useRecoilState(playlistIdState)
 
     useEffect(() => {
         if(spotifyApi.getAccessToken()) {
@@ -18,6 +21,7 @@ const sidebar = () => {
     }, [session, spotifyApi])
 
     console.log(playlists)
+    console.log("You have picked", playlistId)
 
     return (
         <div className='overflow-y-scroll scrollbar-hide h-screen bg-red-500 text-gray-500 p-5 w-60 text-sm border-gray-900'>
@@ -54,13 +58,9 @@ const sidebar = () => {
                 <hr className='border-t-[0.1px] border-gray-900'></hr>
 
                 {/* Playlists */}
-                <p className='cursor-pointer hover:text-white'>Playlist name...</p>
-                <p className='cursor-pointer hover:text-white'>Playlist name...</p>
-                <p className='cursor-pointer hover:text-white'>Playlist name...</p>
-                <p className='cursor-pointer hover:text-white'>Playlist name...</p>
-                <p className='cursor-pointer hover:text-white'>Playlist name...</p>
-                <p className='cursor-pointer hover:text-white'>Playlist name...</p>
-                <p className='cursor-pointer hover:text-white'>Playlist name...</p>
+                {playlists.map((playlist) => (
+                    <p key={playlist.id} className='cursor-pointer hover:text-white' onClick={() => setPlaylistId(playlist.id)}>{playlist.name}</p>
+                ))} 
             </div>
         </div>
     );
